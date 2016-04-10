@@ -1,0 +1,29 @@
+// Enable the nrf24 radio module
+/dts-v1/;
+/plugin/;
+
+/ {
+    compatible = "brcm,bcm2835", "brcm,bcm2836", "brcm,bcm2708", "brcm,bcm2709";
+    fragment@0 {
+        target = <&spi0>;
+        __overlay__ {
+            #address-cells = <0x00000001>;
+            #size-cells = <0x00000000>;
+            status = "okay";
+            spidev@0 {
+                status = "disabled";
+            };
+            nrf24-spi@0 {
+                compatible = "nrf24L01";
+                reg = <0x00000000>;
+                spi-max-frequency = <2000000>;
+                #address-cells = <0x00000001>;
+                #size-cells = <0x00000000>;
+                interrupt-parent = <&gpio>;
+                interrupts = <24 0x2>; /* falling edge */
+                ce-gpio = <&gpio 25 0>;
+                combine-pipes;
+            };
+        };
+    };
+};
